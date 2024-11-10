@@ -1,0 +1,31 @@
+flowchart TB
+    subgraph Data Generation
+        A[Python Data Generator] -->|Generate Events| B[(Cassandra: post_stats)]
+    end
+
+    subgraph Processing Layer
+        B -->|Stream Data| C{Apache Spark}
+        C -->|Aggregate Posts| D[(Cassandra: post_aggregates)]
+        C -->|Aggregate Hashtags| E[(Cassandra: hashtag_stats)]
+
+    end
+
+    subgraph Backend Layer
+        D --> F[Django API]
+        E --> F
+        F -->|REST API| G[Next.js Frontend]
+    end
+
+    subgraph Frontend Layer
+        G -->|Charts & UI| H[User Interface]
+
+    end
+
+    subgraph Database Replication
+        B1[(Replica 1)]
+        B2[(Replica 2)]
+        B3[(Replica 3)]
+        B --> B1
+        B --> B2
+        B --> B3
+    end

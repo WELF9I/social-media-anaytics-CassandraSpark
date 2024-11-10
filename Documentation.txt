@@ -1,0 +1,31 @@
+RUN KAFKA :
+cd ~/kafka
+./start-kafka.sh
+
+# Terminal 1 - Producer
+bin/kafka-console-producer.sh --topic social_interactions --bootstrap-server localhost:9092
+
+# Terminal 2 - Consumer
+bin/kafka-console-consumer.sh --topic social_interactions --from-beginning --bootstrap-server localhost:9092
+
+----------
+RUN SPARK :
+
+start-master.sh
+
+start-worker.sh spark://welf9i:7077
+
+welf9i@welf9i:~/kafka/kafka_2.13-3.7.0$ gedit /etc/cassandra/cassandra.yaml
+
+sudo systemctl stop cassandra
+sudo rm -rf /var/lib/cassandra/data/system/*
+sudo systemctl start cassandra
+
+
+DESCRIBE KEYSPACE social_media_analytics;
+
+
+cqlsh> TRUNCATE social_media_analytics.hashtag_stats;
+cqlsh> TRUNCATE social_media_analytics.post_aggregates;
+cqlsh> TRUNCATE social_media_analytics.post_counters;
+cqlsh> TRUNCATE social_media_analytics.post_stats;
